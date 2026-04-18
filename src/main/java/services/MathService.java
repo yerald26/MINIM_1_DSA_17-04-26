@@ -93,8 +93,19 @@ public class MathService {
     @Path("/institutos/ranking")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getRankingInstitutos() {
-        List<String> ranking = this.manager.obtenerInstitutosOrdenadosPorOperaciones();
-        Ranking rankingArray = new Ranking(ranking);
-        return Response.status(200).entity(rankingArray).build();
+        List<String> lista = this.manager.obtenerInstitutosOrdenadosPorOperaciones();
+
+        // Para poder solucionar el problema del JSON lo genero yo mismo con el siguiente codigo
+        StringBuilder json = new StringBuilder();
+        json.append("[");
+        for (int i = 0; i < lista.size(); i++) {
+            json.append("\"").append(lista.get(i)).append("\"");
+            if (i < lista.size() - 1) {
+                json.append(", ");
+            }
+        }
+        json.append("]");
+
+        return Response.status(200).entity(json.toString()).build();
     }
 }
